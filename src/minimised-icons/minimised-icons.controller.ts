@@ -1,7 +1,9 @@
 import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import {MinimisedIconsService} from "./minimised-icons.service";
 import {MinimisedIcon} from "./minimised-icon.entity";
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Minimised Icons')
 @Controller('minimised-icons')
 export class MinimisedIconsController {
     constructor(private service: MinimisedIconsService) { }

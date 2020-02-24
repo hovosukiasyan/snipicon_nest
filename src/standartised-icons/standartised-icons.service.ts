@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
-import {IconTwin} from "../icon-twins/icon-twin.entity";
 import {Repository} from "typeorm";
 import {StandartisedIcon} from "./standartised-icon.entity";
 
@@ -8,11 +7,11 @@ import {StandartisedIcon} from "./standartised-icon.entity";
 export class StandartisedIconsService {
     constructor(@InjectRepository(StandartisedIcon) private standartisedIconRepository: Repository<StandartisedIcon>) { }
 
-    async getStandartisedIcons(standartisedIcon: StandartisedIcon): Promise<IconTwin[]> {
+    async getStandartisedIcons(standartisedIcon: StandartisedIcon): Promise<StandartisedIcon[]> {
         return await this.standartisedIconRepository.find();
     }
 
-    async getStandartisedIcon(id: number): Promise<IconTwin[]> {
+    async getStandartisedIcon(id: number): Promise<StandartisedIcon[]> {
         return await this.standartisedIconRepository.find({
             where: [{ "id": id }]
         });

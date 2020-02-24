@@ -1,7 +1,9 @@
 import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import {IconTwinsService} from "./icon-twins.service";
 import {IconTwin} from "./icon-twin.entity";
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Icon Twins')
 @Controller('icon-twins')
 export class IconTwinsController {
     constructor(private service: IconTwinsService) { }

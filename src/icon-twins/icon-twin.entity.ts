@@ -9,7 +9,7 @@ export class IconTwin {
     id: number;
 
     @ApiProperty()
-    @Column({ length: 50, unique: true })
+    @Column({ length: 255, unique: true })
     name:string;
 
     @ApiProperty()

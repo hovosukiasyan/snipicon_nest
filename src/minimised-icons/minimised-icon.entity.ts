@@ -1,6 +1,7 @@
 import {ApiProperty} from "@nestjs/swagger";
-import {Column, PrimaryGeneratedColumn} from "typeorm";
+import {Column, PrimaryGeneratedColumn, Entity} from "typeorm";
 
+@Entity('minimised_icons')
 export class MinimisedIcon {
     @ApiProperty()
     @PrimaryGeneratedColumn()
@@ -12,7 +13,7 @@ export class MinimisedIcon {
 
     @ApiProperty()
     @Column()
-    owner_id: number;
+    source_id: number;
 
     @Column({ name: 'created_at', default: () => `now()`, nullable: false })
     createdAt: Date;

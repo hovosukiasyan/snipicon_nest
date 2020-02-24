@@ -2,8 +2,9 @@ import { Controller } from '@nestjs/common';
 import {Body, Delete, Get, Param, Post} from '@nestjs/common';
 import {StandartisedIconsService} from "./standartised-icons.service";
 import {StandartisedIcon} from "./standartised-icon.entity";
+import {ApiTags} from "@nestjs/swagger";
 
-
+@ApiTags('Standartised Icons')
 @Controller('standartised-icons')
 export class StandartisedIconsController {
     constructor(private service: StandartisedIconsService) { }

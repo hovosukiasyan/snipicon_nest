@@ -1,7 +1,9 @@
 import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
 import {DesignerCollectionService} from "./designer-collection.service";
 import {DesignerCollection} from "./designer-collection.entity";
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('Designer Collections')
 @Controller('designer-collection')
 export class DesignerCollectionController {
     constructor(private service: DesignerCollectionService) { }

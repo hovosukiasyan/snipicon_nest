@@ -29,7 +29,7 @@ export class Account {
     organisation_id: number;
 
     @ApiProperty()
-    @Column({ length: 50})
+    @Column({ length: 255})
     organisation_name:string;
 
 
