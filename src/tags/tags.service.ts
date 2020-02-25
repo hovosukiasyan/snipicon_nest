@@ -1,16 +1,22 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {Like, Repository} from 'typeorm';
 import {Tag} from "./tag.entity";
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 @Injectable()
 export class TagsService {
 
     constructor(@InjectRepository(Tag) private tagsRepository: Repository<Tag>) { }
 
-    async getTags(): Promise<Tag[]> {
-        return await this.tagsRepository.find();
+    async getTags(name: string): Promise<Tag[]> {
+        if (name){
+            return await this.tagsRepository.find({
+                where: [{ name: Like(`%${name}%`) } ],
+            })
+        }else{
+            return await this.tagsRepository.find();
+        }
+
     }
 
     async getTag(id: number): Promise<Tag[]> {
@@ -28,7 +34,7 @@ export class TagsService {
     //     this.tagsRepository.save(tag)
     // }
 
-    async deleteTag(tag: Tag) {
-        this.tagsRepository.delete(tag);
+    async deleteTag(id: number) {
+        this.tagsRepository.update({id:id},{is_deleted:true});
     }
 }

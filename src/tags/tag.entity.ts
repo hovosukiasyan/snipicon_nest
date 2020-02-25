@@ -1,5 +1,5 @@
 import {Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
-import { ApiProperty } from "@nestjs/swagger";
+import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
 
 
 @Entity('tags')
@@ -10,7 +10,7 @@ export class Tag {
 
     @ApiProperty()
     @Column({ length: 255, unique: true })
-    name:string;
+    name?:string;
 
     @Column({ name: 'created_at', default: () => `now()`, nullable: false })
     createdAt: Date;

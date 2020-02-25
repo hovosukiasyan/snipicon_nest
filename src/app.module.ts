@@ -11,6 +11,7 @@ import { IconTwinsModule } from './icon-twins/icon-twins.module';
 import { MinimisedIconsModule } from './minimised-icons/minimised-icons.module';
 import { NormalisedIconsModule } from './normalised-icons/normalised-icons.module';
 import { StandartisedIconsModule } from './standartised-icons/standartised-icons.module';
+import { AuthenticationModule} from "./authentication/authentication.module";
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { StandartisedIconsModule } from './standartised-icons/standartised-icons
       IconTwinsModule,
       MinimisedIconsModule,
       NormalisedIconsModule,
-      StandartisedIconsModule
+      StandartisedIconsModule,
+      AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

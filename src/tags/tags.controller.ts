@@ -1,43 +1,43 @@
-import { Controller, Post, Body, Get, Delete,Param, Put, Res, HttpStatus} from '@nestjs/common';
+import {Controller, Post, Body, Get, Delete, Param, Put, Query} from '@nestjs/common';
 import {TagsService} from "./tags.service";
 import {Tag} from "./tag.entity";
-import {ApiTags, ApiParam, ApiResponse} from "@nestjs/swagger";
+import {ApiTags, ApiParam, ApiResponse, ApiPropertyOptional, ApiQuery} from "@nestjs/swagger";
 
-@ApiTags('Tags')
-@Controller('tags')
+@ApiTags('Tag')
+@Controller('api')
 export class TagsController {
 
     constructor(private service: TagsService) { }
 
-    @Get()
+    @Get('/tags')
     @ApiResponse({ status: 200, description: 'All messages', type: Tag})
     @ApiResponse({ status: 404, description: 'Not found.'})
-    getAll(@Param() params){
-        return this.service.getTags();
+    @ApiQuery({ name: 'name',required:false})
+
+    getAll(@Query('name') name){
+        return this.service.getTags(name);
     }
 
-    @Get(':id')
+    @Get('tag/:id')
     @ApiResponse({ status: 200, description: 'One message', type: Tag})
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiParam({ name: 'id', required: true, description: 'Tag Name' })
     get(@Param() params) {
+        console.log(params.id);
         return this.service.getTag(params.id);
     }
     
 
-    @Post()
+    @Post('tag/:name')
     @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     @ApiResponse({ status: 403, description: 'Forbidden.'})
     @ApiParam({ name: 'name', required: true })
-    create(@Body() tag: Tag, @Res() response) {
+    create(@Body() tag: Tag) {
         return this.service.createTag(tag)
-            .then( res => {
-                response.status(HttpStatus.CREATED).json(res);
-            })
-            .catch( ex => {
-                response.status(HttpStatus.FORBIDDEN).json({ex,  message: 'forbidden' });
-            });
     }
+    // async create(@Body() contactData: Contact): Promise<any> {
+    //     return this.contactsService.create(contactData);
+    // }
 
     // @Put()
     // @ApiParam({ name: 'name', required: true })
@@ -45,7 +45,7 @@ export class TagsController {
     //     return this.service.updateTag(tag);
     // }
 
-    @Delete(':id')
+    @Delete('tag/:id')
     @ApiParam({ name: 'id', required: true })
     deleteUser(@Param() params) {
         return this.service.deleteTag(params.id);
