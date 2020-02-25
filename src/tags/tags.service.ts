@@ -21,18 +21,19 @@ export class TagsService {
 
     async getTag(id: number): Promise<Tag[]> {
         return await this.tagsRepository.find({
-            select: ["name"],
             where: [{ "id": id }]
         });
     }
 
-    async createTag(tag: Tag) {
-        this.tagsRepository.save(tag);
+    async createTag(name:string,tag: Tag) {
+        const new_tag = new Tag;
+        new_tag.name = name;
+        return await this.tagsRepository.save(new_tag);
     }
 
-    // async updateTag(tag: Tag) {
-    //     this.tagsRepository.save(tag)
-    // }
+    async updateTag(name: string,id:number, tag: Tag) {
+        this.tagsRepository.update({id:id}, {name:name});
+    }
 
     async deleteTag(id: number) {
         this.tagsRepository.update({id:id},{is_deleted:true});
