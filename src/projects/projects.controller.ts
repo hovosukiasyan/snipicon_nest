@@ -1,30 +1,37 @@
-import {Body, Controller, Delete, Get, Param, Post} from '@nestjs/common';
+import { Controller, Get, HttpException, HttpStatus, Post, Query} from '@nestjs/common';
 import {ProjectsService} from "../projects/projects.service";
 import {Project} from "../projects/project.entity";
-import {ApiTags} from "@nestjs/swagger";
+import {ApiParam, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
 
-@ApiTags('Projects')
-@Controller('projects')
+@ApiTags('Project')
+@Controller('api')
 export class ProjectsController {
     constructor(private service: ProjectsService) { }
 
-    @Get(':id')
-    get(@Param() params) {
-        return this.service.getProject(params.id);
+    @Get('/projects')
+    @ApiResponse({ status: 200, description: 'All messages'})
+    @ApiResponse({ status: 404, description: 'Not found.'})
+    @ApiQuery({ name: 'name',required:false})
+
+    getAll(@Query('name') name){
+        return this.service.getProjects(name);
     }
 
-    @Post()
-    create(@Body() project: Project) {
-        return this.service.createProject(project);
-    }
+    @Post('/project')
+    @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
+    @ApiResponse({ status: 403, description: 'Forbidden.'})
+    @ApiQuery({ name: 'name',required:false})
+    create(@Query('name') name, project: Project) {
 
-    // @Put()
-    // update(@Body() tag: Tag) {
-    //     return this.service.updateTag(tag);
-    // }
 
-    @Delete(':id')
-    deleteUser(@Param() params) {
-        return this.service.deleteProject(params.id);
+        if (!name) {
+            throw new HttpException('name is required', HttpStatus.BAD_REQUEST);
+        }
+
+        const projectCheck = this.service.findProject(name);
+        if (!projectCheck) {
+            throw new HttpException(`Project with name ${name} already exist`, HttpStatus.CONFLICT);
+        }
+        return this.service.createProject(name,project);
     }
 }
