@@ -13,14 +13,14 @@ export class IconTwinsController {
     @ApiResponse({ status: 200, description: 'All messages'})
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiQuery({ name: 'name',required:false})
-    getAll(@Query('name') name) {
+    getAll(@Query('name') name: string) {
         return this.service.getIconTwins(name);
     }
 
     @Get(':id')
     @ApiResponse({ status: 200, description: 'All messages'})
     @ApiResponse({ status: 404, description: 'Not found.'})
-    @ApiParam({ name: 'id', required: true, description: 'IconTwin ID' })
+    @ApiParam({ name: 'id', required: true, description: 'Icon Twin ID' })
 
     async get(@Param('id') id:number) {
         const iconTwin = await this.service.findById(id);
@@ -59,13 +59,18 @@ export class IconTwinsController {
     @Put(':id')
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiResponse({ status: 200, description: 'One message'})
+    @ApiParam({ name: 'id', required: true, description: 'Icon Twin ID' })
     @ApiQuery({ name: 'grid_size',required:true, enum: GridSize})
     @ApiQuery({ name: 'owner_id',required:true})
     @ApiQuery({ name: 'name',required:true})
-    async update(@Query('grid_size') grid_size,
-           @Query('owner_id') owner_id,
-           @Query('name') name,
+    async update(
+           
            @Param('id') id: number ,
+           @Query('name') name: string,
+           @Query('owner_id') owner_id: number,
+           @Query('grid_size') grid_size: number,
+           
+           
            iconTwin: IconTwin) {
         const idCheck = await this.service.findById(id);
         if (!idCheck) {
@@ -78,7 +83,7 @@ export class IconTwinsController {
     @Delete(':id')
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiResponse({ status: 200, description: 'One message'})
-    @ApiParam({ name: 'id', required: true })
+    @ApiParam({ name: 'id', required: true, description: "Icon Twin ID" })
     async delete(@Param('id') id:number) {
         const idCheck = await this.service.findById(id);
         if (!idCheck) {

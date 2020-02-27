@@ -23,7 +23,7 @@ export class DesignerCollectionService {
         });
     }
 
-    async getDesignerCollections(designerCollection: DesignerCollection): Promise<DesignerCollection[]> {
+    async getDesignerCollections(name:string): Promise<DesignerCollection[]> {
         if (name){
             return await this.designerCollectionRepository.find({
                 where: [{ name: Like(`%${name}%`) } ],
@@ -40,12 +40,12 @@ export class DesignerCollectionService {
     async createDesignerCollection(name: string,designerCollection: DesignerCollection) {
         const new_designer_collection = new DesignerCollection;
         new_designer_collection.name = name;
-        this.designerCollectionRepository.save(new_designer_collection);
+        return this.designerCollectionRepository.save(new_designer_collection);
     }
 
-    async updateDesignerCollection(state: boolean,name: string, id:number, designerCollection: DesignerCollection) {
-        this.designerCollectionRepository.update({id:id}, {state:state, name: name, id: id });
-        return await this.designerCollectionRepository.find({id});
+    async updateDesignerCollection(state: boolean,owner_id: number, license_type:string,name: string,  id:number, designerCollection: DesignerCollection) {
+        this.designerCollectionRepository.update({id:id}, {state:state, name: name,license_type:license_type,owner_id: owner_id });
+        return this.designerCollectionRepository.findOne({id});
     }
 
     async deleteDesignerCollection(id: number) {

@@ -1,37 +1,24 @@
-export class DesignerCollectionEntity {}
 import {Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
 import {ApiProperty} from "@nestjs/swagger";
 
-@Entity('designer_collection')
-export class DesignerCollection {
+@Entity('filters')
+export class Filter {
 
     @ApiProperty()
     @PrimaryGeneratedColumn()
     id: number;
 
     @ApiProperty()
-    @Column({ length: 100})
-    name:string;
-
-    @ApiProperty()
-    @Column({default: 1})
-    state:boolean;
-
-    @ApiProperty()
-    @Column({ length: 100})
-    license_type:string;
+    @Column()
+    icon_id: number;
 
     @ApiProperty()
     @Column()
-    owner_id: number;
+    xml_filter_id: number;
 
     @Column({ name: 'created_at', default: () => `now()`, nullable: false })
     createdAt: Date;
 
     @Column({ name: 'updated_at', default: () => 'now()', nullable: false })
     updateTime: Date;
-
-    @ApiProperty()
-    @Column({default: false})
-    is_deleted:boolean;
 }

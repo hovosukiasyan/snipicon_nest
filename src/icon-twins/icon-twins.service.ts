@@ -47,11 +47,11 @@ export class IconTwinsService {
 
     async updateIconTwin(name: string,grid_size: number, owner_id: number, id:number, iconTwin: IconTwin) {
         this.iconTwinRepository.update({id:id}, {name:name, grid_size: grid_size, owner_id: owner_id });
-        return await this.iconTwinRepository.find({id});
+        return await this.iconTwinRepository.findOne({id});
     }
 
     async deleteIconTwin(id: number) {
         this.iconTwinRepository.update({id:id},{is_deleted:true});
-        return await this.iconTwinRepository.find({id});
+        return await this.iconTwinRepository.findOne({id});
     }
 }

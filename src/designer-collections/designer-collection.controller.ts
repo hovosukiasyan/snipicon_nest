@@ -14,7 +14,7 @@ export class DesignerCollectionController {
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiQuery({ name: 'name',required:false})
 
-    getAll(@Query('name') name) {
+    getAll(@Query('name') name: string) {
         return this.service.getDesignerCollections(name);
     }
 
@@ -36,14 +36,10 @@ export class DesignerCollectionController {
     @Post('designer-collection')
     @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     @ApiResponse({ status: 403, description: 'Forbidden.'})
-    @ApiQuery({ name: 'name',required:false})
-    create(@Query('name') name, designerCollection: DesignerCollection) {
-        if (!name) {
-            throw new HttpException('name is required', HttpStatus.BAD_REQUEST);
-        }
-
-        const desinerCollectionCheck = this.service.findDesignerCollection(name);
-        if (!desinerCollectionCheck) {
+    @ApiQuery({ name: 'name',required:true})
+    async create(@Query('name') name: string, designerCollection: DesignerCollection) {
+        const desinerCollectionCheck = await this.service.findDesignerCollection(name);
+        if (desinerCollectionCheck) {
             throw new HttpException(`Designer Collection with name ${name} already exist`, HttpStatus.CONFLICT);
         }
 
@@ -53,28 +49,33 @@ export class DesignerCollectionController {
     @Put('designer-collection/:id')
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiResponse({ status: 200, description: 'One message'})
-    @ApiQuery({ name: 'state',required:false, enum: StateType})
-    @ApiQuery({ name: 'name',required:false})
-    @ApiQuery({ name: 'id',required:false})
-    update(
-        @Query('state') state,
-        @Query('name') name,
+    @ApiParam({ name: 'id', required: true, description: 'Designer Collection ID' })
+    @ApiQuery({ name: 'state',required:true, enum: StateType})
+    @ApiQuery({ name: 'owner_id',required:true})
+    @ApiQuery({ name: 'license_type',required:true})
+    @ApiQuery({ name: 'name',required:true})
+    async update(
         @Param('id') id: number,
+        @Query('name') name: string,
+        @Query('license_type') license_type: string,
+        @Query('owner_id') owner_id: number,
+        @Query('state') state : boolean,
+        
         designer_collection: DesignerCollection
     ) {
-        const idCheck = this.service.findById(id);
+        const idCheck = await this.service.findById(id);
         if (!idCheck) {
             throw new HttpException(`Designer Collection with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
         }
-        return this.service.updateDesignerCollection(state,name,id,designer_collection);
+        return this.service.updateDesignerCollection(state,owner_id,license_type,name,id,designer_collection);
     }
 
     @Delete('designer-collection/:id')
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiResponse({ status: 200, description: 'One message'})
     @ApiParam({ name: 'id', required: true })
-    deleteUser(@Param('id') id:number) {
-        const idCheck = this.service.findById(id);
+    async delete(@Param('id') id:number) {
+        const idCheck = await this.service.findById(id);
         if (!idCheck) {
             throw new HttpException(`Designer Collection with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
         }

@@ -2,7 +2,6 @@ import {Controller, Post, Get, Delete, Param, Put, Query, HttpException, HttpSta
 import {TagsService} from "./tags.service";
 import {Tag} from "./tag.entity";
 import {ApiTags, ApiParam, ApiResponse, ApiQuery} from "@nestjs/swagger";
-import {json} from "express";
 
 @ApiTags('Tag')
 @Controller('api')
@@ -23,7 +22,7 @@ export class TagsController {
     @Get('tag/:id')
     @ApiResponse({ status: 200, description: 'One message'})
     @ApiResponse({ status: 404, description: 'Not found.'})
-    @ApiParam({ name: 'id', required: true, description: 'Tag Name' })
+    @ApiParam({ name: 'id', required: true, description: 'Tag ID' })
     
     async get(@Param('id') id:number) {
         const tag = await this.service.findById(id);
@@ -39,13 +38,8 @@ export class TagsController {
     @Post('tag')
     @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     @ApiResponse({ status: 403, description: 'Forbidden.'})
-    @ApiQuery({ name: 'name',required:false})
-    async create(@Query('name') name, tag: Tag) {
-
-
-        if (!name) {
-            throw new HttpException('name is required', HttpStatus.BAD_REQUEST);
-        }
+    @ApiQuery({ name: 'name',required:true})
+    async create(@Query('name') name: string, tag: Tag) {
 
         const tagCheck = await this.service.findTag(name);
         if (tagCheck) {
@@ -58,14 +52,17 @@ export class TagsController {
     @Put('tag/:id')
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiResponse({ status: 200, description: 'One message'})
-    @ApiQuery({ name: 'name',required:false})
-    async update(@Query('name') name,@Param('id') id: number , tag: Tag) {
+    @ApiQuery({ name: 'name',required:true})
+    async update(
+        @Param('id') id: number,
+        @Query('name') name: string ,
+         ) {
         const idCheck = await this.service.findById(id);
         if (!idCheck) {
             throw new HttpException(`Tag with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
         }
 
-        return this.service.updateTag(name,id,tag);
+        return this.service.updateTag(name,id);
     }
 
 

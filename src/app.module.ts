@@ -11,6 +11,9 @@ import { MinimisedIconsModule } from './minimised-icons/minimised-icons.module';
 import { NormalisedIconsModule } from './normalised-icons/normalised-icons.module';
 import { StandartisedIconsModule } from './standartised-icons/standartised-icons.module';
 import { AuthenticationModule} from "./authentication/authentication.module";
+import { FiltersModule } from './filters/filters.module';
+import { XmlGradientsModule } from './xml-gradients/xml-gradients.module';
+import { XmlFiltersModule } from './xml-filters/xml-filters.module';
 
 @Module({
   imports: [
@@ -26,14 +29,17 @@ import { AuthenticationModule} from "./authentication/authentication.module";
           autoLoadEntities: true,
       }),
       AuthenticationModule,
+      AccountsModule,
       TagsModule,
       ProjectsModule,
-      AccountsModule,
       DesignerCollectionModule,
       IconTwinsModule,
       MinimisedIconsModule,
       NormalisedIconsModule,
       StandartisedIconsModule,
+      FiltersModule,
+      XmlGradientsModule,
+      XmlFiltersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

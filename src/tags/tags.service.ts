@@ -45,7 +45,7 @@ export class TagsService {
 
 
 
-    async updateTag(name: string,id:number, tag: Tag) {
+    async updateTag(name: string,id:number) {
         this.tagsRepository.update({id:id}, {name:name});
         return await this.tagsRepository.find({id});
     }
