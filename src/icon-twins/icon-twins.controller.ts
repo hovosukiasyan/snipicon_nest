@@ -22,9 +22,10 @@ export class IconTwinsController {
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiParam({ name: 'id', required: true, description: 'IconTwin ID' })
 
-    get(@Param('id') id:number) {
-        const idCheck = this.service.findById(id);
-        if (!idCheck) {
+    async get(@Param('id') id:number) {
+        const iconTwin = await this.service.findById(id);
+
+        if (!iconTwin) {
             throw new HttpException(`IconTwin with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
         }
 
@@ -37,7 +38,7 @@ export class IconTwinsController {
     @ApiQuery({ name: 'grid_size',required:true, enum: GridSize})
     @ApiQuery({ name: 'owner_id',required:true})
     @ApiQuery({ name: 'name',required:true})
-    create(
+    async create(
         @Query('grid_size') grid_size,
         @Query('owner_id') owner_id,
         @Query('name') name,
@@ -47,8 +48,8 @@ export class IconTwinsController {
             throw new HttpException('name is required', HttpStatus.BAD_REQUEST);
         }
 
-        const iconTwinCheck = this.service.findIconTwin(name);
-        if (!iconTwinCheck) {
+        const iconTwinCheck = await this.service.findIconTwin(name);
+        if (iconTwinCheck) {
             throw new HttpException(`IconTwin with name ${name} already exist`, HttpStatus.CONFLICT);
         }
 
@@ -61,12 +62,12 @@ export class IconTwinsController {
     @ApiQuery({ name: 'grid_size',required:true, enum: GridSize})
     @ApiQuery({ name: 'owner_id',required:true})
     @ApiQuery({ name: 'name',required:true})
-    update(@Query('grid_size') grid_size,
+    async update(@Query('grid_size') grid_size,
            @Query('owner_id') owner_id,
            @Query('name') name,
            @Param('id') id: number ,
            iconTwin: IconTwin) {
-        const idCheck = this.service.findById(id);
+        const idCheck = await this.service.findById(id);
         if (!idCheck) {
             throw new HttpException(`IconTwin with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
         }
@@ -78,8 +79,8 @@ export class IconTwinsController {
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiResponse({ status: 200, description: 'One message'})
     @ApiParam({ name: 'id', required: true })
-    delete(@Param('id') id:number) {
-        const idCheck = this.service.findById(id);
+    async delete(@Param('id') id:number) {
+        const idCheck = await this.service.findById(id);
         if (!idCheck) {
             throw new HttpException(`IconTwin with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
         }

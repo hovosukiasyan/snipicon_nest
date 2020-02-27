@@ -10,11 +10,17 @@ export class IconTwinsService {
     constructor(@InjectRepository(IconTwin) private iconTwinRepository: Repository<IconTwin>) { }
 
     async findIconTwin(name: string): Promise<IconTwin> {
-        return await this.iconTwinRepository.findOne({ name: name });
+        const iconTwin = await this.iconTwinRepository.findOne({ name });
+        return new Promise(resolve => {
+            resolve(iconTwin);
+        });
     }
 
     async findById(id: number): Promise<IconTwin> {
-        return await this.iconTwinRepository.findOne({ id: id });
+        const iconTwinID =  await this.iconTwinRepository.findOne({id});
+        return new Promise(resolve => {
+            resolve(iconTwinID);
+        });
     }
 
     async getIconTwins(name: string): Promise<IconTwin[]> {
@@ -27,10 +33,8 @@ export class IconTwinsService {
         }
     }
 
-    async getIconTwin(id: number): Promise<IconTwin[]> {
-        return await this.iconTwinRepository.find({
-            where: [{ "id": id }]
-        });
+    async getIconTwin(id: number): Promise<IconTwin> {
+        return await this.iconTwinRepository.findOne(id);
     }
 
     async createIconTwin(name: string, grid_size: number, owner_id: number, iconTwin: IconTwin) {
@@ -43,15 +47,11 @@ export class IconTwinsService {
 
     async updateIconTwin(name: string,grid_size: number, owner_id: number, id:number, iconTwin: IconTwin) {
         this.iconTwinRepository.update({id:id}, {name:name, grid_size: grid_size, owner_id: owner_id });
-        return await this.iconTwinRepository.find({
-            where: [{ "id": id }]
-        });
+        return await this.iconTwinRepository.find({id});
     }
 
     async deleteIconTwin(id: number) {
         this.iconTwinRepository.update({id:id},{is_deleted:true});
-        return await this.iconTwinRepository.find({
-            where: [{ "id": id }]
-        });
+        return await this.iconTwinRepository.find({id});
     }
 }

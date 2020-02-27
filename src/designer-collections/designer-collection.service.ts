@@ -10,11 +10,17 @@ export class DesignerCollectionService {
     constructor(@InjectRepository(DesignerCollection) private designerCollectionRepository: Repository<DesignerCollection>) { }
 
     async findDesignerCollection(name: string): Promise<DesignerCollection> {
-        return await this.designerCollectionRepository.findOne({ name: name });
+        const designerCollection = await this.designerCollectionRepository.findOne({ name });
+        return new Promise(resolve => {
+            resolve(designerCollection);
+        });
     }
 
     async findById(id: number): Promise<DesignerCollection> {
-        return await this.designerCollectionRepository.findOne({ id: id });
+        const designerCollectionID =  await this.designerCollectionRepository.findOne({id});
+        return new Promise(resolve => {
+            resolve(designerCollectionID);
+        });
     }
 
     async getDesignerCollections(designerCollection: DesignerCollection): Promise<DesignerCollection[]> {
@@ -27,6 +33,10 @@ export class DesignerCollectionService {
         }
     }
 
+    async getDesignerCollection(id: number): Promise<DesignerCollection> {
+        return await this.designerCollectionRepository.findOne(id);
+    }
+
     async createDesignerCollection(name: string,designerCollection: DesignerCollection) {
         const new_designer_collection = new DesignerCollection;
         new_designer_collection.name = name;
@@ -35,15 +45,11 @@ export class DesignerCollectionService {
 
     async updateDesignerCollection(state: boolean,name: string, id:number, designerCollection: DesignerCollection) {
         this.designerCollectionRepository.update({id:id}, {state:state, name: name, id: id });
-        return await this.designerCollectionRepository.find({
-            where: [{ "id": id }]
-        });
+        return await this.designerCollectionRepository.find({id});
     }
 
     async deleteDesignerCollection(id: number) {
         this.designerCollectionRepository.update({id:id},{is_deleted:true});
-        return await this.designerCollectionRepository.find({
-            where: [{ "id": id }]
-        });
+        return await this.designerCollectionRepository.find({id});
     }
 }

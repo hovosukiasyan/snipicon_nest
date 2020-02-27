@@ -21,15 +21,15 @@ export class ProjectsController {
     @ApiResponse({ status: 201, description: 'The record has been successfully created.'})
     @ApiResponse({ status: 403, description: 'Forbidden.'})
     @ApiQuery({ name: 'name',required:false})
-    create(@Query('name') name, project: Project) {
+    async create(@Query('name') name, project: Project) {
 
 
         if (!name) {
             throw new HttpException('name is required', HttpStatus.BAD_REQUEST);
         }
 
-        const projectCheck = this.service.findProject(name);
-        if (!projectCheck) {
+        const projectCheck = await this.service.findProject(name);
+        if (projectCheck) {
             throw new HttpException(`Project with name ${name} already exist`, HttpStatus.CONFLICT);
         }
         return this.service.createProject(name,project);

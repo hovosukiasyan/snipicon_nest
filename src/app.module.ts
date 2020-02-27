@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsModule } from './cats/cats.module';
 import { TagsModule } from './tags/tags.module';
 import { ProjectsModule } from './projects/projects.module';
 import { AccountsModule } from './accounts/accounts.module';
@@ -26,7 +25,7 @@ import { AuthenticationModule} from "./authentication/authentication.module";
           synchronize: true,
           autoLoadEntities: true,
       }),
-      CatsModule,
+      AuthenticationModule,
       TagsModule,
       ProjectsModule,
       AccountsModule,
@@ -35,7 +34,6 @@ import { AuthenticationModule} from "./authentication/authentication.module";
       MinimisedIconsModule,
       NormalisedIconsModule,
       StandartisedIconsModule,
-      AuthenticationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

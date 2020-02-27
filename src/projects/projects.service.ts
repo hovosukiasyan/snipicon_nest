@@ -9,7 +9,10 @@ export class ProjectsService {
     constructor(@InjectRepository(Project) private projectsRepository: Repository<Project>) { }
 
     async findProject(name: string): Promise<Project> {
-        return await this.projectsRepository.findOne({ name: name });
+        const project = await this.projectsRepository.findOne({ name });
+        return new Promise(resolve => {
+            resolve(project);
+        });
     }
 
     async getProjects(name: string): Promise<Project[]> {
@@ -25,7 +28,7 @@ export class ProjectsService {
     async createProject(name: string, project: Project) {
         const new_project = new Project;
         new_project.name = name;
-        this.projectsRepository.save(new_project);
+        return await this.projectsRepository.save(new_project);
     }
 
 }

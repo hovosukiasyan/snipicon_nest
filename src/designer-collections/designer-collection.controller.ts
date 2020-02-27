@@ -1,10 +1,11 @@
-import {Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query} from '@nestjs/common';
+import {Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, Query} from '@nestjs/common';
 import {DesignerCollectionService} from "./designer-collection.service";
 import {DesignerCollection} from "./designer-collection.entity";
 import {ApiParam, ApiQuery, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {StateType} from "./enum/stateType";
 
 @ApiTags('Designer Collections')
-@Controller('api/')
+@Controller('api')
 export class DesignerCollectionController {
     constructor(private service: DesignerCollectionService) { }
 
@@ -15,6 +16,21 @@ export class DesignerCollectionController {
 
     getAll(@Query('name') name) {
         return this.service.getDesignerCollections(name);
+    }
+
+    @Get('designer-collections/:id')
+    @ApiResponse({ status: 200, description: 'All messages'})
+    @ApiResponse({ status: 404, description: 'Not found.'})
+    @ApiParam({ name: 'id', required: true, description: 'Designer Collection ID' })
+
+    async get(@Param('id') id:number) {
+        const designerCollection = await this.service.findById(id);
+
+        if (!designerCollection) {
+            throw new HttpException(`Designer Collection with id ${id} doesn't exist`, HttpStatus.NOT_FOUND);
+        }
+
+        return this.service.getDesignerCollection(id);
     }
 
     @Post('designer-collection')
@@ -37,7 +53,7 @@ export class DesignerCollectionController {
     @Put('designer-collection/:id')
     @ApiResponse({ status: 404, description: 'Not found.'})
     @ApiResponse({ status: 200, description: 'One message'})
-    @ApiQuery({ name: 'state',required:false})
+    @ApiQuery({ name: 'state',required:false, enum: StateType})
     @ApiQuery({ name: 'name',required:false})
     @ApiQuery({ name: 'id',required:false})
     update(

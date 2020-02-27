@@ -9,16 +9,17 @@ export class TagsService {
     constructor(@InjectRepository(Tag) private tagsRepository: Repository<Tag>) { }
 
     async findTag(name: string): Promise<Tag> {
-        return await this.tagsRepository.findOne({ name: name });
+        const tag = await this.tagsRepository.findOne({ name });
+        return new Promise(resolve => {
+            resolve(tag);
+        });
     }
 
-    async findById(id: number) {
-        return await this.tagsRepository.find();
-        // console.log(tag);return;
-        // if (!user) {
-        //     return null;
-        // }
-        return await this.tagsRepository.findOne({id});
+    async findById(id: number): Promise<Tag> {
+       const tag =  await this.tagsRepository.findOne({id});
+        return new Promise(resolve => {
+            resolve(tag);
+        });
     }
 
     async getTags(name: string): Promise<Tag[]> {
@@ -32,10 +33,8 @@ export class TagsService {
 
     }
 
-    async getTag(id: number): Promise<Tag[]> {
-        return await this.tagsRepository.find({
-            where: [{ "id": id }]
-        });
+    async getTag(id: number): Promise<Tag> {
+        return await this.tagsRepository.findOne(id);
     }
 
     async createTag(name:string,tag: Tag) {
@@ -48,15 +47,11 @@ export class TagsService {
 
     async updateTag(name: string,id:number, tag: Tag) {
         this.tagsRepository.update({id:id}, {name:name});
-        return await this.tagsRepository.find({
-            where: [{ "id": id }]
-        });
+        return await this.tagsRepository.find({id});
     }
 
     async deleteTag(id: number) {
         this.tagsRepository.update({id:id},{is_deleted:true});
-        return await this.tagsRepository.find({
-            where: [{ "id": id }]
-        });
+        return await this.tagsRepository.find({id});
     }
 }
